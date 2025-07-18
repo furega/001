@@ -94,7 +94,7 @@ if entrada:
 
     # Gráfico de barras
     st.subheader(f"📈 Indicadores Acumulados dos últimos {historico_meses} meses")
-    fig, ax = plt.subplots(figsize=(8, 5))
+    fig, ax = plt.subplots(figsize=(7, 5))
     barras = df_exibir[[c for c in df_exibir.columns if c.endswith('-A')]]
     final = barras.iloc[-1].sort_values()
     ax.bar(final.index, final.values, color='skyblue')
@@ -104,4 +104,5 @@ if entrada:
     ax.set_title("Indicadores Acumulados")
     ax.set_xticklabels(final.index, rotation=45)
     ax.grid(True, axis='y', linestyle='--', alpha=0.5)
+    plt.ylim(valores_finais.min() - 5, valores_finais.max() + 6)
     st.pyplot(fig)
