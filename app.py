@@ -11,7 +11,7 @@ st.set_page_config(page_title="Indicadores Econômicos", layout="wide")
 st.title("📊 Indicadores Econômicos")
 
 # Entrada do usuário
-entrada = st.text_input("Digite a quantidade de meses (ex: 12, 24...) ou uma data no formato 'jun/24':")
+entrada = st.text_input("Digite a quantidade de meses (ex: 12, 24, 36...) ou uma data no formato americano 'feb/24':")
 
 if entrada:
     hoje = datetime.today()
@@ -28,14 +28,14 @@ if entrada:
                 st.error("Data de início inválida ou no futuro.")
                 st.stop()
     except Exception:
-        st.error("Entrada inválida. Use número (ex: 24) ou mês no formato 'jun/24'")
+        st.error("Entrada inválida. Use número (ex: 24) ou mês no formato americano 'feb/24'")
         st.stop()
 
     # --- Coleta de dados ---
     series = {
         'IGPM': 189, 'INCC': 192, 'IPCA': 433, 'CDI': 4391, 'POUP': 196
     }
-    data_inicial = '01/01/2010'
+    data_inicial = '01/01/2000'
     data_final = hoje.strftime('%d/%m/%Y')
 
     def consulta_bc(codigo, ini, fim):
