@@ -92,17 +92,21 @@ if entrada:
     st.subheader("📋 Tabela de Indicadores")
     st.dataframe(df_exibir.style.format("{:,.2f}"))
 
-    # Gráfico de barras
-    st.subheader(f"📈 Indicadores Acumulados dos últimos {historico_meses} meses")
-    fig, ax = plt.subplots(figsize=(7, 5))
-    barras = df_exibir[[c for c in df_exibir.columns if c.endswith('-A')]]
-    final = barras.iloc[-1].sort_values()
-    ax.bar(final.index, final.values, color='skyblue')
-    for i, val in enumerate(final.values):
-        ax.text(i, val + 0.5, f'{val:.2f}%', ha='center', fontsize=10)
-    ax.set_ylabel("Acumulado (%)")
-    ax.set_title("Indicadores Acumulados")
-    ax.set_xticklabels(final.index, rotation=45)
-    ax.grid(True, axis='y', linestyle='--', alpha=0.5)
-    plt.ylim(valores_finais.min() - 5, valores_finais.max() + 6)
-    st.pyplot(fig)
+    # Gráfico de barras acumulados
+cols_acumulados = [col for col in df_acumulado.columns if col.endswith('-A')]
+df_barras = df_acumulado[cols_acumulados].copy()
+valores_finais = df_barras.iloc[-1].sort_values()
+
+plt.figure(figsize=(7, 5))
+bars = plt.bar(valores_finais.index, valores_finais.values, color='skyblue')
+for bar in bars:
+    height = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2, height + 0.5, f'{height:.2f}%',
+             ha='center', va='bottom', fontsize=10)
+plt.title(f"Indicadores Acumulados dos Últimos {historico_meses} meses", fontsize=14)
+plt.ylabel("Acumulado (%)")
+plt.xticks(rotation=45)
+plt.grid(axis='y', linestyle='--', alpha=0.5)
+plt.ylim(valores_finais.min() - 5, valores_finais.max() + 6)
+plt.tight_layout()
+plt.show()
